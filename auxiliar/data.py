@@ -18,8 +18,8 @@ def gen_splitMNIST(dataset, bounds):
     for set_name in sets:
         this_set = getattr(dataset, set_name)
         maxlabels = np.argmax(this_set.labels, 1)
-        sets_list.append(DataSet(this_set.images[((maxlabels > bounds[0]) & (maxlabels < bounds[1])),:],
-                                this_set.labels[((maxlabels > bounds[0]) & (maxlabels < bounds[1]))],
+        sets_list.append(DataSet(this_set.images[((maxlabels >= bounds[0]) & (maxlabels <= bounds[1])),:],
+                                this_set.labels[((maxlabels >= bounds[0]) & (maxlabels <= bounds[1]))],
                                  dtype=dtypes.uint8, reshape=False))
     return base.Datasets(train=sets_list[0], validation=sets_list[1], test=sets_list[2])
 

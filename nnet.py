@@ -95,10 +95,8 @@ class NNet_OWM(object):
                 self.P1 = tf.Variable(tf.eye(int(FLAGS.n_inputs+1)))
                 # mean of inputs
                 x_mu = tf.reduce_mean(self.x1, 0 , keep_dims=True)
-                # multiply p mat with inputs
-                k = tf.matmul(self.P1, tf.transpose(x_mu))
                 # compute P update
-                self.delta_P1 = tf.divide(tf.matmul(k, tf.transpose(k)), self.alphas[0][0] + tf.matmul(x_mu, k))
+                self.delta_P1 = tf.divide(tf.matmul(tf.matmul(self.P1, tf.transpose(x_mu)), tf.transpose(tf.matmul(self.P1, tf.transpose(x_mu)))), self.alphas[0][0] + tf.matmul(x_mu, tf.matmul(self.P1, tf.transpose(x_mu))))
                 # apply update to P
                 self.P1 = tf.assign_sub(self.P1, self.delta_P1)
 
@@ -110,11 +108,9 @@ class NNet_OWM(object):
             with tf.name_scope('P_matrix'):
                 self.P2 = tf.Variable(tf.eye(int(FLAGS.dim_hidden+1)))
                 # mean of its inputs
-                x_mu = tf.reduce_mean(self.x2, 0 , keep_dims=True)
-                # multiply p mat with inputs
-                k = tf.matmul(self.P2, tf.transpose(x_mu))
+                x_mu = tf.reduce_mean(self.x2, 0 , keep_dims=True)                
                 # compute update term
-                self.delta_P2 = tf.divide(tf.matmul(k, tf.transpose(k)), self.alphas[0][1] + tf.matmul(x_mu, k))
+                self.delta_P2 = tf.divide(tf.matmul(tf.matmul(self.P2, tf.transpose(x_mu)), tf.transpose(tf.matmul(self.P2, tf.transpose(x_mu)))), self.alphas[0][1] + tf.matmul(x_mu, tf.matmul(self.P2, tf.transpose(x_mu))))
                 # apply to p2
                 self.P2 = tf.assign_sub(self.P2, self.delta_P2)
 
