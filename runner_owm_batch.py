@@ -2,10 +2,11 @@ import tensorflow as tf
 if int(tf.VERSION[0]) == 2:
     import tensorflow.compat.v1 as tf
     tf.disable_v2_behavior()
+
 from tensorflow.examples.tutorials.mnist import input_data
 # import custom model
-from trainer import train_nnet
-from nnet import NNet_Basic
+from trainer import train_nnet_owm
+from nnet import NNet_OWM_batch
 # import custom helper functions
 from auxiliar.data import gen_splitMNIST
 
@@ -19,6 +20,7 @@ FLAGS = tf.app.flags.FLAGS
 # directories
 tf.app.flags.DEFINE_string('data_dir',  './data/',
                            """ (string) data directory           """)
+
 
 tf.app.flags.DEFINE_string('logging_dir',          './log/',
                            """ (string) log/summary directory    """)
@@ -35,7 +37,7 @@ tf.app.flags.DEFINE_integer('n_classes', 10,
 
 
 # model
-tf.app.flags.DEFINE_string('model',                'basic',
+tf.app.flags.DEFINE_string('model',                'owm',
                             """ (string)  chosen model          """)
 
 
@@ -48,11 +50,12 @@ tf.app.flags.DEFINE_integer('dim_hidden',             800,
 
 
 # training
-tf.app.flags.DEFINE_list('lr',     [[0.05]],
+tf.app.flags.DEFINE_list('lr',     [[0.2]],
                             """ (list)   learning rate array             """)
 
 tf.app.flags.DEFINE_list('alpha',     [[0.9, 0.6]],
                             """ (list)  alpha array (note:[0]*.001**lambda)  """)
+
 
 tf.app.flags.DEFINE_string('optimizer',       'Momentum',
                             """ (string)   optimisation procedure     """)
@@ -70,8 +73,6 @@ tf.app.flags.DEFINE_integer('batch_size',         128,
                             """ (int)     training batch size         """)
 
 
-
-
 def main(argv=None):
 
     FLAGS = tf.app.flags.FLAGS
@@ -85,9 +86,8 @@ def main(argv=None):
     dataset_5 = gen_splitMNIST(raw_data, [8, 9])
     # tasks = [dataset_1, dataset_2]
     tasks = [dataset_1, dataset_2, dataset_3, dataset_4, dataset_5]
-
-    nnet = NNet_Basic()
-    train_nnet(tasks,nnet)
+    nnet = NNet_OWM_batch()
+    train_nnet_owm(tasks, nnet)
 
 
 if __name__ == '__main__':
