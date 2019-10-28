@@ -108,7 +108,7 @@ class NNet_OWM(object):
             with tf.name_scope('P_matrix'):
                 self.P2 = tf.Variable(tf.eye(int(FLAGS.dim_hidden+1)))
                 # mean of its inputs
-                x_mu = tf.reduce_mean(self.x2, 0 , keep_dims=True)                
+                x_mu = tf.reduce_mean(self.x2, 0 , keep_dims=True)
                 # compute update term
                 self.delta_P2 = tf.divide(tf.matmul(tf.matmul(self.P2, tf.transpose(x_mu)), tf.transpose(tf.matmul(self.P2, tf.transpose(x_mu)))), self.alphas[0][1] + tf.matmul(x_mu, tf.matmul(self.P2, tf.transpose(x_mu))))
                 # apply to p2

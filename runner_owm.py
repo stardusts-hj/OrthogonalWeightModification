@@ -73,7 +73,7 @@ tf.app.flags.DEFINE_integer('n_epochs',   20,
 tf.app.flags.DEFINE_integer('display_step',         100,
                             """(int) step size for log to stdout      """)
 
-tf.app.flags.DEFINE_integer('batch_size',         40,
+tf.app.flags.DEFINE_integer('batch_size',         128,
                             """ (int)     training batch size         """)
 
 
@@ -88,7 +88,7 @@ def main(argv=None):
     dataset_3 = gen_splitMNIST(raw_data, [4, 5]) # 4 to 5
     dataset_4 = gen_splitMNIST(raw_data, [6, 7]) # 6 to 7
     dataset_5 = gen_splitMNIST(raw_data, [8, 9]) # 8 to 9
-
+    # tasks = [dataset_1, dataset_2]
     tasks = [dataset_1, dataset_2, dataset_3, dataset_4, dataset_5]
     nnet = NNet_OWM()
     train_nnet(tasks, nnet)
