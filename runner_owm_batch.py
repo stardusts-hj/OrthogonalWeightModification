@@ -5,7 +5,7 @@ if int(tf.VERSION[0]) == 2:
 
 from tensorflow.examples.tutorials.mnist import input_data
 # import custom model
-from trainer import train_nnet_owm
+from trainer import train_nnet_owm_batch
 from nnet import NNet_OWM_batch
 # import custom helper functions
 from auxiliar.data import gen_splitMNIST
@@ -79,15 +79,15 @@ def main(argv=None):
 
     # create datasets for the two tasks
     raw_data = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
-    dataset_1 = gen_splitMNIST(raw_data, [0, 1])
-    dataset_2 = gen_splitMNIST(raw_data, [2, 3])
-    dataset_3 = gen_splitMNIST(raw_data, [4, 5])
-    dataset_4 = gen_splitMNIST(raw_data, [6, 7])
-    dataset_5 = gen_splitMNIST(raw_data, [8, 9])
-    # tasks = [dataset_1, dataset_2]
-    tasks = [dataset_1, dataset_2, dataset_3, dataset_4, dataset_5]
+    dataset_1 = gen_splitMNIST(raw_data, [0, 4])
+    dataset_2 = gen_splitMNIST(raw_data, [5, 9])
+    # dataset_3 = gen_splitMNIST(raw_data, [4, 5])
+    # dataset_4 = gen_splitMNIST(raw_data, [6, 7])
+    # dataset_5 = gen_splitMNIST(raw_data, [8, 9])
+    tasks = [dataset_1, dataset_2]
+    # tasks = [dataset_1, dataset_2, dataset_3, dataset_4, dataset_5]
     nnet = NNet_OWM_batch()
-    train_nnet_owm(tasks, nnet)
+    train_nnet_owm_batch(tasks, nnet)
 
 
 if __name__ == '__main__':

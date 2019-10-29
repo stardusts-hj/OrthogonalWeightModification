@@ -98,7 +98,7 @@ class NNet_OWM_batch(object):
                 # compute P update
                 self.delta_P1 = tf.divide(tf.matmul(tf.matmul(self.P1, tf.transpose(x_mu)), tf.transpose(tf.matmul(self.P1, tf.transpose(x_mu)))), self.alphas[0][0] + tf.matmul(x_mu, tf.matmul(self.P1, tf.transpose(x_mu))))
                 # apply update to P
-                self.P1 = tf.assign_sub(self.P1, self.delta_P1)
+                self.update_pmat1 = tf.assign_sub(self.P1, self.delta_P1)
 
         with tf.name_scope('output'):
             with tf.name_scope('fprop'):
@@ -112,7 +112,7 @@ class NNet_OWM_batch(object):
                 # compute update term
                 self.delta_P2 = tf.divide(tf.matmul(tf.matmul(self.P2, tf.transpose(x_mu)), tf.transpose(tf.matmul(self.P2, tf.transpose(x_mu)))), self.alphas[0][1] + tf.matmul(x_mu, tf.matmul(self.P2, tf.transpose(x_mu))))
                 # apply to p2
-                self.P2 = tf.assign_sub(self.P2, self.delta_P2)
+                self.update_pmat2 = tf.assign_sub(self.P2, self.delta_P2)
 
         return
 

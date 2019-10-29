@@ -3,10 +3,11 @@ if int(tf.VERSION[0]) == 2:
     import tensorflow.compat.v1 as tf
     tf.disable_v2_behavior()
 
+import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 # import custom model
-from trainer import train_nnet_owm
-from nnet import NNet_OWM_task
+from trainer import train_nnet_owm_task
+from nnet import NNet_OWM_batch
 # import custom helper functions
 from auxiliar.data import gen_splitMNIST
 
@@ -86,9 +87,16 @@ def main(argv=None):
     # dataset_5 = gen_splitMNIST(raw_data, [8, 9])
     tasks = [dataset_1, dataset_2]
     # tasks = [dataset_1, dataset_2, dataset_3, dataset_4, dataset_5]
-    nnet = NNet_OWM_task()
-    train_nnet_owm(tasks, nnet)
+    alphas = np.arange(0.001, 1, 0.01)
+    # for ii in range(len(alphas)):
+    #     print('>>>>>>>>>>> Alpha {} >>>>>>>>>>>'.format(alphas[ii]))
+    #     tf.reset_default_graph()
+    #     nnet = NNet_OWM_batch()
+    #     train_nnet_owm_task(tasks, nnet,alphas=[[[alphas[ii]],[alphas[ii]]]])
 
+    tf.reset_default_graph()
+    nnet = NNet_OWM_batch()
+    train_nnet_owm_task(tasks, nnet)
 
 if __name__ == '__main__':
     """ take care of flags on load """
