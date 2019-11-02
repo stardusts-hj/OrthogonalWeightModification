@@ -1,4 +1,7 @@
 
+"""
+Timo Flesch, 2019
+"""
 import tensorflow as tf
 if int(tf.VERSION[0]) == 2:
     import tensorflow.compat.v1 as tf
@@ -62,7 +65,7 @@ def train_nnet(tasks, nnet, alphas= [[[1],[1]]], owm_mode='none'):
                 print("{} Training, Task {}/{}, Epoch {}/{}. Training Loss: {:.4f}, Training Acc: {:.2f}.  Test Loss: {:.4f}, Test Acc: {:.2f}".format(ep_time,ii+1,len(tasks),jj+1, FLAGS.n_epochs, loss_train, acc_train*100,loss_test, acc_test*100))
 
             # at the end of each task, perform OWM
-            if owm_mode == 'task':                
+            if owm_mode == 'task':
                 for kk in range(n_steps_epoch):
                     batch_x, batch_y = tasks[ii].train.next_batch(FLAGS.batch_size)
                     step_alpha =  [[FLAGS.alpha[0][0]*0.001, FLAGS.alpha[0][1]]]

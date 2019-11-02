@@ -1,3 +1,6 @@
+"""
+Timo Flesch, 2019
+"""
 import numpy as np
 import tensorflow as tf
 if int(tf.VERSION[0]) == 2:
