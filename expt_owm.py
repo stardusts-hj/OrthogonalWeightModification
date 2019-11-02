@@ -3,16 +3,13 @@ if int(tf.VERSION[0]) == 2:
     import tensorflow.compat.v1 as tf
     tf.disable_v2_behavior()
 
-from tensorflow.examples.tutorials.mnist import input_data
+from sys import argv
 # import custom model
-from trainer import train_nnet_owm_batch
-from nnet import NNet_OWM_batch
+from trainer import train_nnet
+from nnet import NNet
+
 # import custom helper functions
 from auxiliar.data import gen_splitMNIST
-
-
-# ignore warning messages (remove clutter from stdout)
-tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.WARN)
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -35,10 +32,13 @@ tf.app.flags.DEFINE_integer('n_classes', 10,
 
 
 
-
 # model
-tf.app.flags.DEFINE_string('model',                'owm',
-                            """ (string)  chosen model          """)
+if len(argv) >1:
+    tf.app.flags.DEFINE_string('owm',                argv[1],
+                                """ (string)  training procedure (none, batch,task)    """)
+else:
+    tf.app.flags.DEFINE_string('owm',                'none',
+                                """ (string)  training procedure (none/batch/task)    """)
 
 
 tf.app.flags.DEFINE_string('nonlinearity',       'relu',
@@ -78,16 +78,12 @@ def main(argv=None):
     FLAGS = tf.app.flags.FLAGS
 
     # create datasets for the two tasks
-    raw_data = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
-    dataset_1 = gen_splitMNIST(raw_data, [0, 4])
-    dataset_2 = gen_splitMNIST(raw_data, [5, 9])
-    # dataset_3 = gen_splitMNIST(raw_data, [4, 5])
-    # dataset_4 = gen_splitMNIST(raw_data, [6, 7])
-    # dataset_5 = gen_splitMNIST(raw_data, [8, 9])
+
+    dataset_1 = gen_splitMNIST([0, 4])
+    dataset_2 = gen_splitMNIST([5, 9])
     tasks = [dataset_1, dataset_2]
-    # tasks = [dataset_1, dataset_2, dataset_3, dataset_4, dataset_5]
-    nnet = NNet_OWM_batch()
-    train_nnet_owm_batch(tasks, nnet)
+    nnet = NNet()
+    train_nnet(tasks, nnet, owm_mode=FLAGS.owm)
 
 
 if __name__ == '__main__':
