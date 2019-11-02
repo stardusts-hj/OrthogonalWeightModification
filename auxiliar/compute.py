@@ -1,10 +1,8 @@
-import pickle
 import tensorflow as tf
 import numpy as np
 import scipy
 import scipy.io as sio
 # from scipy.stats import multivariate_normal
-from sys import version_info, argv
 from datetime import datetime
 
 
