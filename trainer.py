@@ -21,6 +21,11 @@ def train_nnet(tasks, nnet, alphas= [[[1],[1]]], owm_mode='none'):
     results['loss_train'] = np.zeros((len(tasks),FLAGS.n_epochs))
     results['acc_test'] = np.zeros((len(tasks),len(tasks)))
     results['loss_test'] = np.zeros((len(tasks),len(tasks)))
+    if FLAGS.store_outputs:
+        results['y_hidden'] = dict()
+        results['y_scores'] = dict()
+        results['labels'] = dict()
+
     init_vars = tf.global_variables_initializer()
     # gpu training: only allocate as much VRAM as required
     config = tf.ConfigProto()
@@ -32,6 +37,11 @@ def train_nnet(tasks, nnet, alphas= [[[1],[1]]], owm_mode='none'):
         # writer = tf.compat.v1.summary.FileWriter(FLAGS.logging_dir, sess.graph)
         # loop over tasks:
         for ii in range(len(tasks)):
+            if FLAGS.store_outputs:
+                results['y_hidden']['sess'+ str(ii+1)] = dict()
+                results['y_scores']['sess'+ str(ii+1)] = dict()
+                results['labels']['task' + str(ii+1)] = np.argmax(tasks[ii].test.labels,axis=1)
+
             print("Now training split mnist, task %d" % (ii+1))
             n_data = len(tasks[ii].train.labels[:])
             n_steps_total = n_data*FLAGS.n_epochs//FLAGS.batch_size
@@ -86,5 +96,8 @@ def train_nnet(tasks, nnet, alphas= [[[1],[1]]], owm_mode='none'):
                 results['loss_test'][ii, jj] = loss_test
                 ep_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 print(">>>> Task {}/{}, Test Loss {:.2f}, Test Accuracy {:.2f}".format(jj+1, len(tasks), loss_test, acc_test*100))
+                if FLAGS.store_outputs:
+                    results['y_hidden']['sess' + (str(ii+1))]['task' + str(jj+1)] = sess.run(nnet.y_hidden,feed_dict=test_dict)
+                    results['y_scores']['sess' + (str(ii+1))]['task' + str(jj+1)] = sess.run(nnet.scores,feed_dict=test_dict)
 
         return results

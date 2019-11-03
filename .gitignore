@@ -2,3 +2,4 @@ todo.md
 .wakatime*
 __pycache__/
 events*
+log/*

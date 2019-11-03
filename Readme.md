@@ -1,6 +1,9 @@
 Replication of Orthogonal Weights Modification (https://www.nature.com/articles/s42256-019-0080-x)  
 Evaluated with a splitMNIST experiment.
 
+### Requirements
+see requirements.txt
+
 ### Usage
 I've implemented three variants of the algorithm:
 * "none": no OWM updates at all  
